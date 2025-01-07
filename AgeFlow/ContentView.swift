@@ -41,7 +41,17 @@ struct ContentView: View {
                 }
             }
             // Present the splash screen in a full screen cover
-            .fullScreenCover(isPresented: $isShowingSplash) {
+            .fullScreenCover(
+                isPresented: $isShowingSplash,
+                onDismiss: {
+                    print("Splash dismissed; re-checking birthDate")
+
+                    if let savedDate = UserDefaults.standard.object(forKey: "userBirthDate") as? Date {
+                        birthDate = savedDate
+                        startAgeTimer()
+                    }
+                }
+            ) {
                 newUserSplashScreen(isPresented: $isShowingSplash, birthDate: $birthDate)
             }
             // Present the settings page as a full-screen cover

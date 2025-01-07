@@ -35,7 +35,8 @@ struct newUserSplashScreen: View {
                 
                 Button(action: {
                     // When user taps "Done":
-                    saveBirthDate(tempBirthDate)
+                    UserDefaults.standard.set(tempBirthDate, forKey: "userBirthDate")
+                    print("Saved birthDate to UserDefaults: \(tempBirthDate)")
                     birthDate = tempBirthDate // Update the birthDate in ContentView
                     isPresented = false  // Dismiss the splash
                 }) {
@@ -48,11 +49,5 @@ struct newUserSplashScreen: View {
             }
             .padding()
         }
-    }
-    
-    /// Save the birthDate to UserDefaults for future launches
-    private func saveBirthDate(_ date: Date) {
-        UserDefaults.standard.set(date, forKey: "userBirthDate")
-        print("Saved birthDate to UserDefaults: \(date)")
     }
 }
