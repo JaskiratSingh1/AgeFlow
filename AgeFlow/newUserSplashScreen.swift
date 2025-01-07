@@ -5,9 +5,6 @@ struct newUserSplashScreen: View {
     @Binding var isPresented: Bool
     @Binding var birthDate: Date? // Binding to update the birthDate in ContentView
     
-    // Temporary storage for birthDate while user picks it
-    @State private var tempBirthDate = Date()
-    
     var body: some View {
         ZStack {
             Color(.systemBlue)
@@ -25,7 +22,10 @@ struct newUserSplashScreen: View {
                 
                 // A date picker for selecting a birthday — disallow future dates
                 DatePicker("Birth Date",
-                           selection: $tempBirthDate,
+                           selection: Binding(
+                               get: { birthDate ?? Calendar.current.date(from: DateComponents(year: 2000, month: 1, day: 1))! },
+                               set: { birthDate = $0 }
+                           ),
                            in: ...Date(),             // from the distant past up to "now"
                            displayedComponents: .date)
                     .datePickerStyle(WheelDatePickerStyle())  // Show month/day/year all at once
@@ -35,9 +35,10 @@ struct newUserSplashScreen: View {
                 
                 Button(action: {
                     // When user taps "Done":
-                    UserDefaults.standard.set(tempBirthDate, forKey: "userBirthDate")
-                    print("Saved birthDate to UserDefaults: \(tempBirthDate)")
-                    birthDate = tempBirthDate // Update the birthDate in ContentView
+                    if let selectedDate = birthDate {
+                        UserDefaults.standard.set(selectedDate, forKey: "userBirthDate")
+                        print("Saved birthDate to UserDefaults: \(selectedDate)")
+                    }
                     isPresented = false  // Dismiss the splash
                 }) {
                     Text("Done")

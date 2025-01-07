@@ -60,7 +60,9 @@ struct SettingsView: View {
         // SwiftUI automatically updates the app's color scheme with @AppStorage.
         // This function ensures that the view is refreshed immediately.
         DispatchQueue.main.async {
-            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                windowScene.windows.first?.overrideUserInterfaceStyle = isDarkMode ? .dark : .light
+            }
         }
     }
 }

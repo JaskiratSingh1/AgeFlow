@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var userAge: Double = 0.0
     @State private var isShowingSplash: Bool = false
-    @State private var birthDate: Date? = nil
+    @State private var birthDate: Date? = Calendar.current.date(from: DateComponents(year: 2000, month: 1, day: 1)) // Default to 1/1/2000
     @State private var timer: Timer? = nil // Track the active timer
     
     // State to control showing settings
@@ -52,7 +52,10 @@ struct ContentView: View {
                     }
                 }
             ) {
-                newUserSplashScreen(isPresented: $isShowingSplash, birthDate: $birthDate)
+                newUserSplashScreen(isPresented: $isShowingSplash, birthDate: Binding(
+                    get: { birthDate ?? Calendar.current.date(from: DateComponents(year: 2000, month: 1, day: 1))! },
+                    set: { birthDate = $0 }
+                ))
             }
             // Present the settings page as a full-screen cover
             .fullScreenCover(isPresented: $isShowingSettings) {
