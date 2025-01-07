@@ -19,11 +19,16 @@ struct ContentView: View {
         NavigationStack {
             GeometryReader { geometry in
                 let width = geometry.size.width
-                let height = geometry.size.height
+                
                 ZStack {
                     // Conditional background color
-                    (colorScheme == .dark ? Color.black : Color.teal)
-                        .ignoresSafeArea()
+                    LinearGradient(
+                        gradient: Gradient(colors: colorScheme == .dark ? [Color.black, Color.mint] : [Color.white, Color.teal]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .ignoresSafeArea()
+                    
                     // Center the entire “Age” block in the middle of the screen
                     VStack(spacing: 20) {
                         Spacer()
@@ -53,8 +58,11 @@ struct ContentView: View {
                     Button {
                         isShowingSettings = true
                     } label: {
-                        Image(systemName: "gearshape")
+                        Image(systemName: "gear")
+                            .font(.system(size: 20, weight: .regular)) // Adjust icon size
+                            .foregroundColor(.primary) // Match the icon color to the current theme
                     }
+                    .padding(8)
                 }
             }
             // Present the splash screen in a full screen cover
