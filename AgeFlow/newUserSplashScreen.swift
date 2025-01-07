@@ -6,17 +6,29 @@ struct newUserSplashScreen: View {
     @Binding var isPresented: Bool
     @Binding var birthDate: Date? // Binding to update the birthDate in ContentView
     
+    @State private var startColor: Color = .red
+    @State private var endColor: Color = .white
+    @State private var colorToggle = false // Toggle to switch colors
+    
     var body: some View {
         ZStack {
-            Color(.systemBlue)
+            LinearGradient(
+                gradient: Gradient(colors: [startColor, endColor]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                .onAppear {
+                    startAnimatingGradient()
+                }
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {
-                Text("Welcome!")
+                Text("AgeFlow")
                     .font(.largeTitle)
                     .foregroundColor(.white)
                 
-                Text("Please provide your birth date so we can calculate your age.")
+                Text("Please provide your birth date for your age to be calculated.")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .padding()
@@ -56,4 +68,18 @@ struct newUserSplashScreen: View {
             .padding()
         }
     }
+    
+    private func startAnimatingGradient() {
+            Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+                withAnimation(.easeInOut(duration: 10.0)) {
+                    colorToggle.toggle()
+                    startColor = colorToggle ? .teal : .cyan
+                    endColor = colorToggle ? .purple : .white
+                }
+            }
+        }
+}
+
+#Preview {
+    newUserSplashScreen(isPresented: .constant(true), birthDate: .constant(Date()))
 }
