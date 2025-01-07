@@ -12,9 +12,16 @@ struct ContentView: View {
     // Tracks Dark/Light Mode setting from UserDefaults
     @AppStorage("isDarkMode") private var isDarkMode: Bool = false
     
+    // Detect the current color scheme
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         NavigationStack {
             ZStack {
+                // Conditional background color
+                (colorScheme == .dark ? Color.black : Color.teal)
+                    .ignoresSafeArea() // Extend the background color
+                
                 // --- Main Age Display ---
                 Text(String(format: "%.8f", userAge)) // Display age with 8 decimal places
                     .font(.system(size: 40, weight: .bold, design: .monospaced))
@@ -22,7 +29,6 @@ struct ContentView: View {
                     .padding()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.yellow))
             
             // Toolbar with Settings Button
             .toolbar {
@@ -36,7 +42,7 @@ struct ContentView: View {
             }
             // Present the splash screen in a full screen cover
             .fullScreenCover(isPresented: $isShowingSplash) {
-                newUserSplashScreen(isPresented: $isShowingSplash)
+                newUserSplashScreen(isPresented: $isShowingSplash, birthDate: $birthDate)
             }
             // Present the settings page as a full-screen cover
             .fullScreenCover(isPresented: $isShowingSettings) {

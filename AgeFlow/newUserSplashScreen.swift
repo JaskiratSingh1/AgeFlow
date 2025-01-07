@@ -3,6 +3,7 @@ import SwiftUI
 struct newUserSplashScreen: View {
     // A binding to let us communicate back to the parent if the user is done
     @Binding var isPresented: Bool
+    @Binding var birthDate: Date? // Binding to update the birthDate in ContentView
     
     // Temporary storage for birthDate while user picks it
     @State private var tempBirthDate = Date()
@@ -35,6 +36,7 @@ struct newUserSplashScreen: View {
                 Button(action: {
                     // When user taps "Done":
                     saveBirthDate(tempBirthDate)
+                    birthDate = tempBirthDate // Update the birthDate in ContentView
                     isPresented = false  // Dismiss the splash
                 }) {
                     Text("Done")
@@ -51,6 +53,6 @@ struct newUserSplashScreen: View {
     /// Save the birthDate to UserDefaults for future launches
     private func saveBirthDate(_ date: Date) {
         UserDefaults.standard.set(date, forKey: "userBirthDate")
-        print("Saved birthDate to UserDefaults: \(tempBirthDate)")
+        print("Saved birthDate to UserDefaults: \(date)")
     }
 }
