@@ -17,25 +17,32 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                // Conditional background color
-                (colorScheme == .dark ? Color.black : Color.teal)
-                    .ignoresSafeArea()
-
-                // Center the entire “Age” block in the middle of the screen
-                VStack(spacing: 20) {
-                    Text("Your age is")
-                        .font(.system(.title3, design: .monospaced))
-                        .foregroundColor(.primary) // adjusts automatically in light/dark
-
-                    Text(String(format: "%.8f", userAge))
-                        .font(.system(size: 48, weight: .bold, design: .monospaced))
-                        .foregroundColor(.primary)
-                        .multilineTextAlignment(.center)
-
-                    Text("years")
-                        .font(.system(.title, design: .monospaced))
-                        .foregroundColor(.primary)
+            GeometryReader { geometry in
+                let width = geometry.size.width
+                let height = geometry.size.height
+                ZStack {
+                    // Conditional background color
+                    (colorScheme == .dark ? Color.black : Color.teal)
+                        .ignoresSafeArea()
+                    // Center the entire “Age” block in the middle of the screen
+                    VStack(spacing: 20) {
+                        Spacer()
+                        
+                        Text("Your age is")
+                            .font(.system(size: width * 0.04, design: .monospaced))
+                            .foregroundColor(.primary) // adjusts automatically in light/dark
+                        
+                        Text(String(format: "%.8f", userAge))
+                            .font(.system(size: width * 0.13, weight: .bold, design: .monospaced))
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.center)
+                        
+                        Text("years")
+                            .font(.system(size: width * 0.1, design: .monospaced))
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
