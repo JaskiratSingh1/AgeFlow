@@ -20,13 +20,23 @@ struct ContentView: View {
             ZStack {
                 // Conditional background color
                 (colorScheme == .dark ? Color.black : Color.teal)
-                    .ignoresSafeArea() // Extend the background color
-                
-                // --- Main Age Display ---
-                Text(String(format: "%.8f", userAge)) // Display age with 8 decimal places
-                    .font(.system(size: 40, weight: .bold, design: .monospaced))
-                    .multilineTextAlignment(.center)
-                    .padding()
+                    .ignoresSafeArea()
+
+                // Center the entire “Age” block in the middle of the screen
+                VStack(spacing: 20) {
+                    Text("Your age is")
+                        .font(.system(.title3, design: .monospaced))
+                        .foregroundColor(.primary) // adjusts automatically in light/dark
+
+                    Text(String(format: "%.8f", userAge))
+                        .font(.system(size: 48, weight: .bold, design: .monospaced))
+                        .foregroundColor(.primary)
+                        .multilineTextAlignment(.center)
+
+                    Text("years")
+                        .font(.system(.title, design: .monospaced))
+                        .foregroundColor(.primary)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
