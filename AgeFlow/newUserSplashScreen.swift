@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 
 struct newUserSplashScreen: View {
     // A binding to let us communicate back to the parent if the user is done
@@ -36,8 +37,12 @@ struct newUserSplashScreen: View {
                 Button(action: {
                     // When user taps "Done":
                     if let selectedDate = birthDate {
-                        UserDefaults.standard.set(selectedDate, forKey: "userBirthDate")
+                        let defaults = UserDefaults(suiteName: "group.com.jaskirat.singh.ageflow.AgeFlow")
+                        defaults?.set(selectedDate, forKey: "userBirthDate")
                         print("Saved birthDate to UserDefaults: \(selectedDate)")
+                        
+                        // Update widget
+                        WidgetCenter.shared.reloadAllTimelines()
                     }
                     isPresented = false  // Dismiss the splash
                 }) {

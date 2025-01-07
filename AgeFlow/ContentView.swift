@@ -71,7 +71,9 @@ struct ContentView: View {
                 onDismiss: {
                     print("Splash dismissed; re-checking birthDate")
 
-                    if let savedDate = UserDefaults.standard.object(forKey: "userBirthDate") as? Date {
+                    let defaults = UserDefaults(suiteName: "group.com.jaskirat.singh.ageflow.AgeFlow")
+                    
+                    if let savedDate = defaults?.object(forKey: "userBirthDate") as? Date {
                         birthDate = savedDate
                         startAgeTimer()
                     }
@@ -89,7 +91,8 @@ struct ContentView: View {
             
             .onAppear {
                 // Load the saved birth date from UserDefaults
-                if let savedDate = UserDefaults.standard.object(forKey: "userBirthDate") as? Date {
+                let defaults = UserDefaults(suiteName: "group.com.jaskirat.singh.ageflow.AgeFlow")
+                if let savedDate = defaults?.object(forKey: "userBirthDate") as? Date {
                     birthDate = savedDate
                     startAgeTimer() // Start the timer with the saved date
                 } else {

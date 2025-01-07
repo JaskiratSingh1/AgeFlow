@@ -1,4 +1,5 @@
 import SwiftUI
+import WidgetKit
 
 struct SettingsView: View {
     @Binding var isPresented: Bool
@@ -38,14 +39,19 @@ struct SettingsView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         if let actualBirthDate = birthDate {
-                            UserDefaults.standard.set(actualBirthDate, forKey: "userBirthDate")
+                            let defaults = UserDefaults(suiteName: "group.com.jaskirat.singh.ageflow.AgeFlow")
+                            defaults?.set(actualBirthDate, forKey: "userBirthDate")
                         } else {
                             // If no date was set, default to the current date
                             let defaultDate = Date()
-                            UserDefaults.standard.set(defaultDate, forKey: "userBirthDate")
+                            let defaults = UserDefaults(suiteName: "group.com.jaskirat.singh.ageflow.AgeFlow")
+                            defaults?.set(defaultDate, forKey: "userBirthDate")
                             birthDate = defaultDate
                         }
 
+                        // Reload widget
+                        WidgetCenter.shared.reloadAllTimelines()
+                        
                         // Dismiss the settings sheet
                         isPresented = false
                     }
