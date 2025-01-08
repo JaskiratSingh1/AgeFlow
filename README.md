@@ -61,4 +61,10 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
+## Privacy
+
+This app does not collect or store any user data.
+
+---
+
 Thank you for using AgeFlow! 🎉
