@@ -15,6 +15,11 @@ struct ContentView: View {
     // Detect the current color scheme
     @Environment(\.colorScheme) var colorScheme
     
+    // Animated color state
+    @State private var startColor: Color = .white
+    @State private var endColor: Color = .teal
+    @State private var colorToggle = false
+    
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
@@ -23,7 +28,7 @@ struct ContentView: View {
                 ZStack {
                     // Conditional background color
                     LinearGradient(
-                        gradient: Gradient(colors: colorScheme == .dark ? [Color.black, Color.mint] : [Color.white, Color.teal]),
+                        gradient: Gradient(colors: [startColor, endColor]),
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -90,6 +95,11 @@ struct ContentView: View {
             }
             
             .onAppear {
+                // 1) Initialize the animated gradient with appropriate colors for the current mode
+                setupInitialColors()
+                // 2) Kick off the background animation
+                startAnimatingGradient()
+                
                 // Load the saved birth date from UserDefaults
                 let defaults = UserDefaults(suiteName: "group.com.jaskirat.singh.ageflow.AgeFlow")
                 if let savedDate = defaults?.object(forKey: "userBirthDate") as? Date {
@@ -120,6 +130,36 @@ struct ContentView: View {
         // Create a new timer to update the age every 0.01 seconds
         timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
             userAge = calculateAge(birthDate: storedBirthDate)
+        }
+    }
+    
+    // MARK: - Set Initial Colors for Light/Dark
+    private func setupInitialColors() {
+        if isDarkMode {
+            startColor = .black
+            endColor   = .indigo
+        } else {
+            startColor = .white
+            endColor   = .teal
+        }
+    }
+        
+    // MARK: - Animate the Gradient
+    private func startAnimatingGradient() {
+        Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { _ in
+            withAnimation(.easeInOut(duration: 20.0)) {
+                colorToggle.toggle()
+                
+                if isDarkMode {
+                    // Dark-mode palette
+                    startColor = colorToggle ? .indigo   : .gray
+                    endColor   = colorToggle ? .black  : .blue
+                } else {
+                    // Light-mode palette
+                    startColor = colorToggle ? .teal   : .cyan
+                    endColor   = colorToggle ? .pink : .white
+                }
+            }
         }
     }
 }
